@@ -120,6 +120,8 @@ $>
 Bariz güvenlik nedenleriyle, tüm kimlik bilgileri, API anahtarları, env değişkenleri vb... yerel olarak bir .env dosyasına kaydedilmeli ve git tarafından yoksayılmalıdır.
 Herkese açık olarak saklanan kimlik bilgileri, sizi doğrudan projenin başarısızlığına yönlendirecektir.
 
+
+
 -Bonus kısım-
 Bu proje için bonus kısmının basit olması hedeflenmiştir.
 Her ekstra hizmet için bir Dockerfile yazılmalıdır.
