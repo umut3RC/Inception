@@ -18,3 +18,9 @@ fi
 #Bu sayede bash betiği çalıştıktan sonra Nginx veya başka bir komut çalıştırılabilir
 #ve kontrol Dockerfile veya Docker Compose dosyasına geçer.
 exec "$@"
+
+#x509: İmzalı sertifika oluşturur,
+#days: Geçerlilik süresini belirler,
+#newkey: Yeni RSA anahtarı oluşturur,
+#keyout-out: Anahtar ve sertifika çıktı yolunu belirler,
+#subj: Sertifika bilgilerini belirler
