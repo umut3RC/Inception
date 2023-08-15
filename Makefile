@@ -16,7 +16,10 @@ clean:
 	@docker image prune -f
 	@docker network prune -f
 	@docker system prune -af
+
+fclean: clean
+	docker system prune -af
 # @$(DC) down -v --remove-orphansd
 # @docker rmi -f $$(docker images -q)
 
-.PHONY: all down re clean
+.PHONY: all down re clean fclean

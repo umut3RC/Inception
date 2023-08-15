@@ -26,7 +26,6 @@ RUN mkdir /run/php
 COPY ./tools/create_wordpress.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/create_wordpress.sh
 ENTRYPOINT ["/usr/local/bin/create_wordpress.sh"]
-#ENTRYPOINT: Konteynır başlatıldığı zaman ilk çalıştıracağı komut dosyasıdır.
 
 WORKDIR /var/www/html/
 
