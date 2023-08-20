@@ -209,3 +209,72 @@ services:
     depends_on:
       - wordpress
     restart: unless-stopped
+#____________________________________________________________________________V
+version: '3'    // docker versiyonu
+
+networks:
+  docker-network:
+    driver: bridge    //konteynırlar arasında köprü şeklinde bağlantı kurar(bridge, host, none)
+
+volumes:
+  wp_data:
+    driver: local
+    driver_opts:
+      type: none    //özel depolama seçeneği
+      o: bind    //bind=bağlamak, o=options, dosyalamanın bağlı olacağı belirtilir.
+      device: /home/${USER}/data/wordpress
+
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${USER}/data/mariadb
+
+services:    //Konteynırlar
+  mariadb:
+    container_name: mariadb    //isim vermeyince rastgele atıyor.
+    build:    //konteynırın build edileceği dosya.
+      context: ./requirements/mariadb/
+      dockerfile: Dockerfile
+    env_file:    //env değişkenlerin çekileceği yer. enviroment olarak tek tek burada belirtilebilir.
+      - ./.env
+    volumes:    //konteynır sonlandırıldığında veriler kaybolur. Verinin kaydedileceği yer.
+      - db_data:/var/lib/mysql    //db_data yı /var/lib/mysql e yönlendirir.
+    networks:    //konteynırlar için ağ bağlantısı, aynı adlarda aynı ağ altında olur.
+      - docker-network
+    restart: unless-stopped    //konteynır çöktüğünde yeniden başlaması, kullanıcı durdurduğunda sonlanması için.
+
+  wordpress:
+    container_name: wordpress
+    build:
+      context: ./requirements/wordpress/
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    depends_on:    //önce mariadb'nin oluşturulması beklenir.
+      - mariadb
+    volumes:
+      - wp_data:/var/www/html
+    networks:
+      - docker-network
+    restart: unless-stopped
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./requirements/nginx/
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    volumes:
+      - wp_data:/var/www/html
+    networks:
+      - docker-network
+    ports:
+      - 443:443    //docker'ın 443 portu nginx'in 443 portuna bağlanır.
+    depends_on:
+      - wordpress
+    restart: unless-stopped
+
+#____________________________________________________________________________^
